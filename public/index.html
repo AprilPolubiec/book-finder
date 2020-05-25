@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Find Me a Book</title>
+    <script
+      src="https://kit.fontawesome.com/1931a4cb5d.js"
+      crossorigin="anonymous"
+    ></script>
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/7.14.5/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
@@ -21,6 +25,10 @@
   <body>
     <div id="main">
       <div id="book-container"></div>
+      <div id='like-buttons'>
+        <button type="button"><i class="fas fa-times-circle"></i></button>
+        <button type="button"><i class="fas fa-check-circle"></i></button>
+      </div>
       <button id="find-book">Find a Book</button>
     </div>
   </body>

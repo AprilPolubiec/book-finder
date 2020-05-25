@@ -14,6 +14,11 @@
   box-sizing: border-box;
 }
 
+button {
+  outline: none;
+  border: none;
+}
+
 #main {
   display: flex;
   flex-direction: column;
@@ -21,6 +26,26 @@
   overflow-y: scroll;
   justify-content: center;
   background-color: var(--mainLight);
+}
+
+#like-buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 200px;
+  align-self: center;
+}
+
+.fas {
+  font-size: 3rem;
+  background-color: var(--mainLight);
+}
+
+.fas.fa-check-circle {
+  color: #32cd32;
+}
+
+.fas.fa-times-circle {
+  color: #dc143c;
 }
 
 #find-book {
