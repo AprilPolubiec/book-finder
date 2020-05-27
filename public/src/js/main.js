@@ -5,17 +5,15 @@ document.addEventListener('DOMContentLoaded', function () {
   if (window.location.hostname == 'localhost') {
     functions.useFunctionsEmulator('http://localhost:5001')
   }
-  const findBook = functions.httpsCallable('findBook')
 
-  const findBookButton = $('#find-book')
-  const bookContainer = $('#book-container')
-  findBookButton.click(() => {
+  const displayRandomBook = (swipe_direction) => {
+    const findBook = functions.httpsCallable('findBook')
     findBook().then((result) => {
-      console.log(result)
       var bookInfo = result.data.volumeInfo
       var bookCard = $(`<div class='book-card center'></div>`)
       // $('#book-container .book-card:nth-last-child(2)').removeClass('left')
       // bookContainer.children().last().removeClass('center').addClass('left')
+      bookContainer.children().last().remove()
       bookContainer.append(bookCard)
       bookCard.append(`<img src='${bookInfo.imageLinks.thumbnail}'></img>`)
       bookCard.append(
@@ -37,5 +35,33 @@ document.addEventListener('DOMContentLoaded', function () {
       //   bookCard.previous().addClass('left')
       // })
     })
+  }
+
+  const findBookButton = $('#find-book')
+  const bookContainer = $('#book-container')
+
+  const likeButtons = $(`<div id='like-buttons'></div>`)
+  const dislikeButton = $(
+    `<button type="button"><i class="fas fa-times-circle"></i></button>`
+  )
+  const likeButton = $(
+    `<button type="button"><i class="fas fa-check-circle"></i></button>`
+  )
+  likeButtons.append(dislikeButton, likeButton)
+
+  likeButton.click(() => {
+    $('.book-card').removeClass('center').addClass('swipe').addClass('right')
+    displayRandomBook()
+  })
+
+  dislikeButton.click(() => {
+    $('.book-card').removeClass('center').addClass('swipe').addClass('left')
+    displayRandomBook()
+  })
+
+  findBookButton.click(() => {
+    displayRandomBook()
+    $('#main').append(likeButtons)
+    findBookButton.remove()
   })
 })
