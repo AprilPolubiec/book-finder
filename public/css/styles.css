@@ -153,3 +153,41 @@ button {
   margin: 0.5rem 0;
   font-size: 0.8rem;
 }
+
+#mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondaryDark);
+  opacity: 60%;
+  /* filter: brightness(20%); */
+  z-index: 0;
+}
+
+#login {
+  visibility: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-400px) translateY(-200px);
+  width: 800px;
+  height: 400px;
+  display: flex;
+  z-index: 1;
+  -webkit-box-shadow: -1px 3px 17px -8px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 3px 17px -8px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 3px 17px -8px rgba(0, 0, 0, 0.75);
+}
+
+#login .left-panel {
+  width: 50%;
+  background-color: var(--secondaryDark);
+}
+
+#login .right-panel {
+  width: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

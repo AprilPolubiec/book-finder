@@ -18,14 +18,28 @@
     <!-- <script defer src="/__/firebase/7.14.5/firebase-storage.js"></script> -->
     <!-- initialize the SDK after all desired features are loaded -->
     <script defer src="/__/firebase/init.js"></script>
-    <script src="./src/js/main.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"
+    />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
   </head>
   <body>
     <div id="main">
       <div id="book-container"></div>
       <button id="find-book">Find a Book</button>
+      <div id='login'>
+        <img class='left-panel' src='./src/img/left-panel.png'></img>
+        <div class='right-panel'>
+          <div id="firebaseui-auth-container"></div>
+          <div id="loader">Loading...</div>
+          </div>
+      </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="./src/js/main.js"></script>
   </body>
 </html>
