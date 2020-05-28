@@ -36,7 +36,6 @@ button {
 }
 
 #sidebar {
-  width: 40%;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -243,6 +242,6 @@ button {
 
 #library.open {
   background-color: var(--primaryDark);
-  width: 100%;
+  width: 250px;
   height: 100%;
 }
