@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const likeButton = $(
     `<button type="button"><i class="fas fa-check-circle"></i></button>`
   )
+  const navTab = $('#nav')
+  const library = $('#library')
   likeButtons.append(dislikeButton, likeButton)
   var currentBook = {}
 
@@ -90,8 +92,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   const updateInterests = () => {
-    console.log(currentBook)
-    //db.collection('users').doc(auth.currentUser.uid).update()
+    db.collection('users')
+      .doc(auth.currentUser.uid)
+      .update({ books: firebase.firestore.FieldValue.arrayUnion(currentBook) })
   }
 
   likeButton.click(() => {
@@ -107,7 +110,6 @@ document.addEventListener('DOMContentLoaded', function () {
   dislikeButton.click(() => {
     $('.book-card').removeClass('center').addClass('swipe').addClass('left')
     if (auth.currentUser) {
-      updateInterests()
       displayRandomBook()
     } else {
       renderLoginScreen()
@@ -118,5 +120,22 @@ document.addEventListener('DOMContentLoaded', function () {
     displayRandomBook()
     $('#main').append(likeButtons)
     findBookButton.remove()
+  })
+
+  const toggleNavTabClass = () => {
+    if (!library.hasClass('open')) {
+      navTab.toggleClass('open')
+    }
+  }
+
+  navTab.hover(toggleNavTabClass, toggleNavTabClass)
+
+  navTab.click(() => {
+    if (!library.hasClass('open')) {
+      navTab.removeClass('open')
+    } else {
+      navTab.addClass('open')
+    }
+    library.toggleClass('open')
   })
 })

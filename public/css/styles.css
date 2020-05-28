@@ -21,13 +21,25 @@ button {
   cursor: pointer;
 }
 
+#container {
+  display: flex;
+  background-color: var(--mainLight);
+}
+
 #main {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  overflow-y: scroll;
+  width: 100%;
   justify-content: center;
   background-color: var(--mainLight);
+}
+
+#sidebar {
+  width: 40%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 #like-buttons {
@@ -38,7 +50,8 @@ button {
   margin: 1rem;
 }
 
-.fas {
+.fas.fa-check-circle,
+.fas.fa-times-circle {
   font-size: 3rem;
   background-color: var(--mainLight);
 }
@@ -190,4 +203,46 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  background-color: var(--primaryDark);
+  right: 0;
+  cursor: pointer;
+  transition: all ease-in-out 0.5s;
+  width: 15px;
+}
+
+#nav.open {
+  width: 30px;
+  justify-content: center;
+}
+
+.fas.fa-chevron-right {
+  font-size: 1rem;
+  background-color: var(--primaryDark);
+  color: var(--tertiaryLight);
+  transition: all ease-in-out 0.5s;
+}
+
+#nav.open .fas.fa-chevron-right {
+  transform: rotate(-180deg);
+  transition: all ease-in-out 0.5s;
+}
+
+#library {
+  background-color: var(--primaryDark);
+  width: 0;
+  height: 100%;
+  transition: all ease-in-out 0.5s;
+}
+
+#library.open {
+  background-color: var(--primaryDark);
+  width: 100%;
+  height: 100%;
 }
