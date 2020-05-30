@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (window.location.hostname == 'localhost') {
     functions.useFunctionsEmulator('http://localhost:5001')
   }
-
+  //TODO: define mobile parameters to determine which arrow to import for nav
   const main = $('#main')
   const findBookButton = $('#find-book')
   const bookContainer = $('#book-container')

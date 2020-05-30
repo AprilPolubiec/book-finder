@@ -222,14 +222,16 @@ button {
   justify-content: center;
 }
 
-.fas.fa-chevron-right {
+.fas.fa-chevron-right,
+.fas.fa-chevron-down {
   font-size: 1rem;
   background-color: var(--primaryDark);
   color: var(--tertiaryLight);
   transition: all ease-in-out 0.5s;
 }
 
-#nav.open .fas.fa-chevron-right {
+#nav.open .fas.fa-chevron-right,
+#nav.open .fas.fa-chevron-down {
   transform: rotate(-180deg);
   transition: all ease-in-out 0.5s;
 }
@@ -311,4 +313,86 @@ button {
   right: 71vw;
   transform: translatey(-40vh);
   border-radius: 2rem;
+}
+
+.fas.fa-chevron-down {
+  display: none;
+}
+
+@media (max-width: 425px) {
+  #container {
+    flex-direction: column;
+    overflow: hidden;
+    height: 100vh;
+  }
+  #main {
+    height: unset;
+    flex-grow: 1;
+  }
+  #nav,
+  #nav.open {
+    position: absolute;
+    right: 50%;
+    transform: translateX(25px);
+    width: 50px;
+    height: 40px;
+    z-index: 5;
+  }
+  .fas.fa-chevron-down {
+    display: inline;
+  }
+  .fas.fa-chevron-right {
+    display: none;
+  }
+  #sidebar {
+    flex-direction: column;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  #library {
+    width: 100%;
+    height: 0;
+    z-index: 4;
+  }
+  #library.open {
+    background-color: var(--primaryDark);
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+  }
+  #find-book {
+    z-index: 3;
+  }
+  #book-preview {
+    z-index: 6;
+    width: 100vw;
+    right: 0;
+    height: 484px;
+    overflow-y: scroll;
+  }
+  #close-button {
+    z-index: 7;
+    right: 42%;
+    top: 110%;
+  }
+  #like-buttons {
+    z-index: 4;
+  }
+  #login {
+    z-index: 7;
+    flex-direction: column;
+  }
+  #login .left-panel {
+    width: 100%;
+    height: 76%;
+    padding-left: 15rem;
+    padding-right: 15rem;
+  }
+  #login .right-panel {
+    width: 100%;
+  }
+  .fas.fa-minus-circle {
+    visibility: visible;
+  }
 }
