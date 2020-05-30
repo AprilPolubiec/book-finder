@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var { email, name, picture } = authResult.additionalUserInfo.profile
         if (authResult.additionalUserInfo.isNewUser) {
           //Create doc
-          // console.log('adding doc')
+          console.log(books)
           db.collection('users').doc(authResult.user.uid).set({
             email,
             name,
@@ -174,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
         )
     } else {
       unsubscribeDoc()
+      books = []
       // console.log('no user')
     }
   })
