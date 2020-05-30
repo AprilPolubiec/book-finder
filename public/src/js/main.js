@@ -28,15 +28,19 @@ document.addEventListener('DOMContentLoaded', function () {
   var uiConfig = {
     callbacks: {
       signInSuccessWithAuthResult: function (authResult, redirectUrl) {
-        console.log(authResult, redirectUrl)
+        // console.log(authResult, redirectUrl)
         var { email, name, picture } = authResult.additionalUserInfo.profile
         if (authResult.additionalUserInfo.isNewUser) {
           //Create doc
-          db.collection('users').doc(authResult.user.uid).set({
-            email,
-            name,
-            picture,
-          })
+          console.log('adding doc')
+          db.collection('users')
+            .doc(authResult.user.uid)
+            .set({
+              email,
+              name,
+              picture,
+              books: [currentBook],
+            })
         }
         $('#login').css('visibility', 'hidden')
         $('#mask').remove()
@@ -96,6 +100,44 @@ document.addEventListener('DOMContentLoaded', function () {
       .doc(auth.currentUser.uid)
       .update({ books: firebase.firestore.FieldValue.arrayUnion(currentBook) })
   }
+
+  const updateLibrary = (books) => {
+    var books = books
+    books.forEach((book) => {
+      console.log(book)
+      var id = book.data.id
+      if ($(`#${book.data.id}`).length === 0) {
+        var libraryBookEl = $(`<div id=${id} className="book"></div>`)
+        var bookImage = $(
+          `<img src='${book.data.volumeInfo.imageLinks.thumbnail}'></img>`
+        )
+        libraryBookEl.append(bookImage)
+        library.append(libraryBookEl)
+      }
+    })
+  }
+
+  var unsubscribeDoc = () => {}
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log(user.uid)
+      unsubscribeDoc = db
+        .collection('users')
+        .doc(user.uid)
+        .onSnapshot(
+          (doc) => {
+            updateLibrary(doc.data().books)
+          },
+          (error) => {
+            console.log('User does not exist')
+            auth.signOut()
+          }
+        )
+    } else {
+      unsubscribeDoc()
+      console.log('no user')
+    }
+  })
 
   likeButton.click(() => {
     $('.book-card').removeClass('center').addClass('swipe').addClass('right')
