@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const closePreviewButton = $('#close-button')
   likeButtons.append(dislikeButton, likeButton)
   var currentBook = {}
+  var books = []
 
   //Firebase auth UI
   var ui = new firebaseui.auth.AuthUI(auth)
@@ -35,14 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (authResult.additionalUserInfo.isNewUser) {
           //Create doc
           console.log('adding doc')
-          db.collection('users')
-            .doc(authResult.user.uid)
-            .set({
-              email,
-              name,
-              picture,
-              books: [currentBook],
-            })
+          db.collection('users').doc(authResult.user.uid).set({
+            email,
+            name,
+            picture,
+            books,
+          })
         }
         $('#login').css('visibility', 'hidden')
         $('#mask').remove()
@@ -111,19 +110,19 @@ document.addEventListener('DOMContentLoaded', function () {
   const displayRandomBook = () => {
     const findBook = functions.httpsCallable('findBook')
     findBook().then((result) => {
+      console.log('Found book: ', result)
       currentBook = result
       renderBook(result, 'main')
     })
   }
 
   const updateInterests = () => {
-    db.collection('users')
-      .doc(auth.currentUser.uid)
-      .update({ books: firebase.firestore.FieldValue.arrayUnion(currentBook) })
+    console.log('Updating books with ', books)
+    db.collection('users').doc(auth.currentUser.uid).update({ books })
   }
 
-  const updateLibrary = (books) => {
-    var books = books
+  const updateLibrary = () => {
+    console.log('Updating library')
     books.forEach((book) => {
       console.log(book)
       var id = book.data.id
@@ -135,7 +134,21 @@ document.addEventListener('DOMContentLoaded', function () {
         bookImage.click(() => {
           renderBook(book, 'library')
         })
-        libraryBookEl.append(bookImage)
+        var removeBookButton = $(`<i class="fas fa-minus-circle"></i>`)
+        libraryBookEl.hover(
+          () => removeBookButton.css('visibility', 'visible'),
+          () => removeBookButton.css('visibility', 'hidden')
+        )
+        removeBookButton.click(() => {
+          console.log('Removing book: ', book.data.id)
+          books = books.filter((existingBook) => {
+            console.log(existingBook, book)
+            return existingBook.data.id !== book.data.id
+          })
+          $(`#${book.data.id}`).remove()
+          updateInterests()
+        })
+        libraryBookEl.append(bookImage, removeBookButton)
         library.append(libraryBookEl)
       }
     })
@@ -144,13 +157,15 @@ document.addEventListener('DOMContentLoaded', function () {
   var unsubscribeDoc = () => {}
   auth.onAuthStateChanged((user) => {
     if (user) {
-      console.log(user.uid)
+      console.log('User signed in')
       unsubscribeDoc = db
         .collection('users')
         .doc(user.uid)
         .onSnapshot(
           (doc) => {
-            updateLibrary(doc.data().books)
+            console.log('Change in user doc')
+            books = doc.data().books
+            updateLibrary()
           },
           (error) => {
             console.log('User does not exist')
@@ -166,9 +181,11 @@ document.addEventListener('DOMContentLoaded', function () {
   likeButton.click(() => {
     $('.book-card').removeClass('center').addClass('swipe').addClass('right')
     if (auth.currentUser) {
+      books.push(currentBook)
       updateInterests()
       displayRandomBook()
     } else {
+      books.push(currentBook)
       renderLoginScreen()
     }
   })
