@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
   )
   const navTab = $('#nav')
   const library = $('#library')
+  const bookPreviewContainer = $('#book-preview')
+  const closePreviewButton = $('#close-button')
   likeButtons.append(dislikeButton, likeButton)
   var currentBook = {}
 
@@ -62,11 +64,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
   ui.start('#firebaseui-auth-container', uiConfig)
 
-  const renderBook = (bookData) => {
+  const renderBook = (bookData, src) => {
+    console.log('rendering book from ', src)
+    var container
+    switch (src) {
+      case 'main':
+        container = bookContainer
+        break
+      case 'library':
+        container = bookPreviewContainer
+        $('#close-button').css('visibility', 'visible')
+        break
+      default:
+        break
+    }
     var bookInfo = bookData.data.volumeInfo
     var bookCard = $(`<div class='book-card center'></div>`)
-    bookContainer.children().last().remove()
-    bookContainer.append(bookCard)
+    container.children().last().remove()
+    container.append(bookCard)
     bookCard.append(`<img src='${bookInfo.imageLinks.thumbnail}'></img>`)
     bookCard.append(
       `<div>Title: ${bookInfo.title}${
@@ -78,7 +93,13 @@ document.addEventListener('DOMContentLoaded', function () {
     bookCard.append(
       `<a href="${bookInfo.previewLink}" target="_blank">Preview</a>`
     )
+    container.css('visibility', 'visible')
   }
+
+  closePreviewButton.click(() => {
+    bookPreviewContainer.css('visibility', 'hidden')
+    closePreviewButton.css('visibility', 'hidden')
+  })
 
   const renderLoginScreen = () => {
     const pageMask = $(`<div id='mask'></div>`)
@@ -91,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const findBook = functions.httpsCallable('findBook')
     findBook().then((result) => {
       currentBook = result
-      renderBook(result)
+      renderBook(result, 'main')
     })
   }
 
@@ -107,10 +128,13 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log(book)
       var id = book.data.id
       if ($(`#${book.data.id}`).length === 0) {
-        var libraryBookEl = $(`<div id=${id} className="book"></div>`)
+        var libraryBookEl = $(`<div id=${id} class="book"></div>`)
         var bookImage = $(
           `<img src='${book.data.volumeInfo.imageLinks.thumbnail}'></img>`
         )
+        bookImage.click(() => {
+          renderBook(book, 'library')
+        })
         libraryBookEl.append(bookImage)
         library.append(libraryBookEl)
       }
