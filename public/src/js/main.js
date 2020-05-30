@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var { email, name, picture } = authResult.additionalUserInfo.profile
         if (authResult.additionalUserInfo.isNewUser) {
           //Create doc
-          console.log('adding doc')
+          // console.log('adding doc')
           db.collection('users').doc(authResult.user.uid).set({
             email,
             name,
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ui.start('#firebaseui-auth-container', uiConfig)
 
   const renderBook = (bookData, src) => {
-    console.log('rendering book from ', src)
+    // console.log('rendering book from ', src)
     var container
     switch (src) {
       case 'main':
@@ -110,21 +110,21 @@ document.addEventListener('DOMContentLoaded', function () {
   const displayRandomBook = () => {
     const findBook = functions.httpsCallable('findBook')
     findBook().then((result) => {
-      console.log('Found book: ', result)
+      // console.log('Found book: ', result)
       currentBook = result
       renderBook(result, 'main')
     })
   }
 
   const updateInterests = () => {
-    console.log('Updating books with ', books)
+    // console.log('Updating books with ', books)
     db.collection('users').doc(auth.currentUser.uid).update({ books })
   }
 
   const updateLibrary = () => {
-    console.log('Updating library')
+    // console.log('Updating library')
     books.forEach((book) => {
-      console.log(book)
+      // console.log(book)
       var id = book.data.id
       if ($(`#${book.data.id}`).length === 0) {
         var libraryBookEl = $(`<div id=${id} class="book"></div>`)
@@ -140,9 +140,9 @@ document.addEventListener('DOMContentLoaded', function () {
           () => removeBookButton.css('visibility', 'hidden')
         )
         removeBookButton.click(() => {
-          console.log('Removing book: ', book.data.id)
+          // console.log('Removing book: ', book.data.id)
           books = books.filter((existingBook) => {
-            console.log(existingBook, book)
+            // console.log(existingBook, book)
             return existingBook.data.id !== book.data.id
           })
           $(`#${book.data.id}`).remove()
@@ -157,24 +157,24 @@ document.addEventListener('DOMContentLoaded', function () {
   var unsubscribeDoc = () => {}
   auth.onAuthStateChanged((user) => {
     if (user) {
-      console.log('User signed in')
+      // console.log('User signed in')
       unsubscribeDoc = db
         .collection('users')
         .doc(user.uid)
         .onSnapshot(
           (doc) => {
-            console.log('Change in user doc')
+            // console.log('Change in user doc')
             books = doc.data().books
             updateLibrary()
           },
           (error) => {
-            console.log('User does not exist')
+            // console.log('User does not exist')
             auth.signOut()
           }
         )
     } else {
       unsubscribeDoc()
-      console.log('no user')
+      // console.log('no user')
     }
   })
 
